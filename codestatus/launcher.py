@@ -18,7 +18,7 @@ import shlex
 # import shutil
 import subprocess
 
-import folder
+import utils
 
 
 CODESTATUS_EXAMPLES = """
@@ -74,35 +74,16 @@ class CodeStatus(object):
             logging.error("The path specified does not exist")
             exit(1)
 
-        logging.debug("Folder: %s", folder.fofofo())
-
-
-    def run_command(self, command, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
-        """
-        Run shell command
-        """
-        if type(command) is list:
-            cmd = command
-        else:
-            cmd = shlex.split(command)
-        try:
-            process = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
-            out, err = process.communicate()
-            return out
-        except KeyboardInterrupt:
-            logging.error("Interrupted!")
-
-
     def run(self):
         """
         Run CodeStatus
         """
         self.parse_args()
         logging.debug("Running: sw_metrics...")
-        self.run_command("sw_metrics " + self.options.path)
+        utils.execute("sw_metrics " + self.options.path)
         template = """--template='{\n\t"file": "{file}",\n\t"line": "{line}",\n\t"column": "{column}",\n\t"callstack": "{callstack}",\n\t"text": "{inconclusive:text}",\n\t"severity": "{severity}",\n\t"message": "{message}",\n\t"id": "{id}",\n\t"cwe": "{cwe}",\n\t"code": "{code}"\n},'"""
         logging.debug("Running: cppcheck...")
-        self.run_command("cppcheck -q " + template + " " + self.options.path)
+        utils.execute("cppcheck -q " + template + " " + self.options.path)
         logging.debug("Done")
 
 
