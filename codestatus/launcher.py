@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-CodeStatus script
+CodeStatus
 
 This script collects code metrics
 FIXME: description
@@ -9,15 +9,14 @@ FIXME: description
 
 from __future__ import print_function
 import argparse
-# import datetime
-# import glob
 import logging
 import os
-# import re
-import shlex
-# import shutil
-import subprocess
 
+import cloc
+import cppcheck
+import cyclo
+import git
+import pmccabe
 import utils
 
 
@@ -30,7 +29,7 @@ examples:
 # FIXME: examples
 
 
-class CodeStatus(object):
+class CodeStatusLauncher(object):
     """
     This class is a launcher
     FIXME: class description
@@ -49,10 +48,30 @@ class CodeStatus(object):
         parser.add_argument("-n", "--dry-run",
                             default=False,
                             action="store_true",
-                            help="Just print CodeStatus commands without running them")
+                            help="Just print commands without running them")
         parser.add_argument("--log-format",
                             default="[codestatus] %(levelname)5s: %(message)s",
                             help=argparse.SUPPRESS)
+        parser.add_argument("--git",
+                            default=False,
+                            action="store_true",
+                            help="Collect Git statistics")
+        parser.add_argument("--cloc",
+                            default=False,
+                            action="store_true",
+                            help="Run cloc - Count Lines Of Code")
+        parser.add_argument("--pmccabe",
+                            default=False,
+                            action="store_true",
+                            help="Run pmccabe - Cyclomatic Complexity")
+        parser.add_argument("--cyclo",
+                            default=False,
+                            action="store_true",
+                            help="Run cyclo - Cyclomatic Complexity")
+        parser.add_argument("--cppcheck",
+                            default=False,
+                            action="store_true",
+                            help="Run cppcheck - check C/C++ code")
         parser.add_argument("path",
                             nargs="?",
                             default="./",
@@ -71,7 +90,7 @@ class CodeStatus(object):
         logging.debug("Options: %s", self.options)
 
         if not os.path.isdir(self.options.path):
-            logging.error("The path specified does not exist")
+            logging.error("Specified path '%s' does not exist", self.options.path)
             exit(1)
 
     def run(self):
@@ -79,14 +98,19 @@ class CodeStatus(object):
         Run CodeStatus
         """
         self.parse_args()
-        logging.debug("Running: sw_metrics...")
-        utils.execute("sw_metrics " + self.options.path)
-        template = """--template='{\n\t"file": "{file}",\n\t"line": "{line}",\n\t"column": "{column}",\n\t"callstack": "{callstack}",\n\t"text": "{inconclusive:text}",\n\t"severity": "{severity}",\n\t"message": "{message}",\n\t"id": "{id}",\n\t"cwe": "{cwe}",\n\t"code": "{code}"\n},'"""
-        logging.debug("Running: cppcheck...")
-        utils.execute("cppcheck -q " + template + " " + self.options.path)
+        if self.options.git:
+            git.Git().run()
+        if self.options.cloc:
+            cloc.Cloc().run()
+        if self.options.pmccabe:
+            pmccabe.PMcCabe().run()
+        if self.options.cyclo:
+            cyclo.Cyclo().run()
+        if self.options.cppcheck:
+            cppcheck.CppCheck().run()
         logging.debug("Done")
 
 
 if __name__ == "__main__":
-    codestatus = CodeStatus()
+    codestatus = CodeStatusLauncher()
     codestatus.run()

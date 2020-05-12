@@ -9,3 +9,18 @@ Statistics:
 - Number of commits per day, week, month, year
 - Number of contributors per day, week, month, year
 """
+
+import logging
+
+import utils
+
+
+class Git:
+    """FIXME"""
+    def __init__(self):
+        """FIXME"""
+        logging.debug("Git: init")
+
+    def run(self):
+        """FIXME"""
+        logging.debug("Git: running...")

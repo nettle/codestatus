@@ -10,3 +10,18 @@ Install in Ubuntu:
 Download:
 - https://github.com/AlDanial/cloc
 """
+
+import logging
+
+import utils
+
+
+class Cloc:
+    """FIXME"""
+    def __init__(self):
+        """FIXME"""
+        logging.debug("Cloc: init")
+
+    def run(self):
+        """FIXME"""
+        logging.debug("Cloc: running...")
