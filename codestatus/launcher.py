@@ -17,7 +17,6 @@ import cppcheck
 import cyclo
 import git
 import pmccabe
-import utils
 
 
 CODESTATUS_EXAMPLES = """

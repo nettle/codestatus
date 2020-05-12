@@ -8,9 +8,7 @@ import subprocess
 
 
 def execute(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
-    """
-    Run shell command
-    """
+    """Run shell command"""
     if type(command) is list:
         cmd = command
     else:
@@ -21,3 +19,8 @@ def execute(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         return out
     except KeyboardInterrupt:
         logging.error("Interrupted!")
+
+
+def available(tool):
+    """Return True if tool available"""
+    return bool(execute("which " + tool))
