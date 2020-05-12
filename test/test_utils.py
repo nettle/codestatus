@@ -1,25 +1,9 @@
-import imp
-import os
-import sys
-import unittest
+import test_base
 
 
-# Disable *.pyc files
-sys.dont_write_bytecode = True
-
-
-class TestUtils(unittest.TestCase):
+class TestUtils(test_base.TestBase):
     """Unittest class for utils"""
-    @classmethod
-    def setUpClass(cls):
-        """Load module"""
-        cls.module_name = "utils"
-        cls.module_path = "codestatus/utils.py"
-        cls.module_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), os.pardir, cls.module_path))
-        cls.module = imp.load_source(cls.module_name, cls.module_path)
-        os.chdir(os.path.abspath(os.path.dirname(__file__)))
-
+    module_name = "utils"
 
     def test_execute(self):
         """Test execute()"""

@@ -1,25 +1,9 @@
-import imp
-import os
-import sys
-import unittest
+import test_base
 
 
-# Disable *.pyc files
-sys.dont_write_bytecode = True
-
-
-class TestFolder(unittest.TestCase):
+class TestFolder(test_base.TestBase):
     """Unittest class for Folder"""
-    @classmethod
-    def setUpClass(cls):
-        """Load module"""
-        cls.module_name = "folder"
-        cls.module_path = "codestatus/folder.py"
-        cls.module_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), os.pardir, cls.module_path))
-        cls.module = imp.load_source(cls.module_name, cls.module_path)
-        os.chdir(os.path.abspath(os.path.dirname(__file__)))
-
+    module_name = "folder"
 
     def test_folder(self):
         def print_folder(f, name=".", depth=0):
