@@ -97,17 +97,24 @@ class CodeStatusLauncher(object):
         Run CodeStatus
         """
         self.parse_args()
-        if self.options.git:
-            git.Git().run()
-        if self.options.cloc:
-            cloc.Cloc().run()
-        if self.options.pmccabe:
-            pmccabe.PMcCabe().run()
-        if self.options.cyclo:
-            cyclo.Cyclo().run()
-        if self.options.cppcheck:
-            cppcheck.CppCheck().run()
-        logging.debug("Done")
+        cwd = os.getcwd()
+        try:
+            logging.debug("Chdir: %s", self.options.path)
+            os.chdir(self.options.path)
+            if self.options.git:
+                git.Git().run()
+            if self.options.cloc:
+                cloc.Cloc().run()
+            if self.options.pmccabe:
+                pmccabe.PMcCabe().run()
+            if self.options.cyclo:
+                cyclo.Cyclo().run()
+            if self.options.cppcheck:
+                cppcheck.CppCheck().run()
+            logging.debug("Done")
+        finally:
+            logging.debug("Restoring: %s", cwd)
+            os.chdir(cwd)
 
 
 if __name__ == "__main__":
