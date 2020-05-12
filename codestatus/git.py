@@ -1,7 +1,7 @@
 """
 Git statistics
 
-Requires: git (version ?)
+Requires: git (version 2.17.1?)
 
 Statistics:
 - Number of commits
